@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="hello">Hello World, MainActivity!</string>
+	<string name="app_name">Wristband</string>
+	<string name="greetingText">Any good shows tonight? Long-press to find out!</string>
+	<string name="footer">WRISTBAND by Nimo is powered by SongKick and
+		bandcamp.
+</string>
+	<string name="map">Get Map</string>
+	<string name="mapcond">Map</string>
+	<string name="about">About Wristband</string>
+	<string name="aboutcond">About</string>
+	<string name="websitest">Go to bandcamp site</string>
+	<string name="bandcamp">bandcamp</string>
+	<string name="bcdisclaimer">The term \'Bandcamp\' is a trademark of Bandcamp,
+		Inc. This application uses the Bandcamp API but is not endorsed or
+		certified by Bandcamp, Inc.</string>
+	<string name="aboutMessage">Wristband uses the SongKick and Bandcamp APIs to
+		help you discover shows happening in your area.</string>
+	<string name="app_version">0.4.0 beta 1</string>
+	<string name="copyright">Copyright 2011 Allan Pichardo.</string>
+</resources>

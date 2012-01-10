@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <TextView
+        android:id="@+id/bandTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Large Text"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <LinearLayout
+        android:id="@+id/linearLayout3"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent" >
+
+        <LinearLayout
+            android:id="@+id/linearLayout1"
+            android:layout_width="133dp"
+            android:layout_height="match_parent"
+            android:orientation="vertical" >
+
+            <ImageView
+                android:id="@+id/coverArt"
+                android:layout_width="126dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.25" />
+
+            <LinearLayout
+                android:id="@+id/linearLayout2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight=".75"
+                android:orientation="vertical" >
+            </LinearLayout>
+        </LinearLayout>
+
+        <ExpandableListView
+            android:id="@+id/albumsList"
+            android:layout_width="192dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.33" >
+
+        </ExpandableListView>
+    </LinearLayout>
+
+</LinearLayout>
