@@ -36,7 +36,6 @@ public class Profile extends Activity {
 	TextView bandTitle;
 	ImageView coverArt;
 	ExpandableListView albumsList;
-	MyExpandableListAdapter theAdapter;
 	
 	public void onCreate(Bundle savedInstanceState) {
     	
@@ -49,13 +48,15 @@ public class Profile extends Activity {
         bandTitle = (TextView)findViewById(R.id.bandTitle);
         coverArt = (ImageView)findViewById(R.id.coverArt);
         albumsList = (ExpandableListView)findViewById(R.id.albumsList);
-        theAdapter = new MyExpandableListAdapter();
+        MyExpandableListAdapter theAdapter = new MyExpandableListAdapter();
          
         bandTitle.setText(extras.getString("band_name"));
         Log.d("loaded","now about to get image");
         //coverArt.setImageURI(Uri.parse(extras.getString("album_art")));
         coverArt.setImageBitmap(UtilityBelt.bitmapFromNet(extras.getString("album_art")));
         populateList(extras.getLong("band_id"));
+        //Make the list
+		albumsList.setAdapter(theAdapter);
 
 	}
 	
@@ -82,8 +83,7 @@ public class Profile extends Activity {
 				mAlbums[i] = new Album(discArray.getJSONObject(i));
 			}
 			
-			//Make the list
-			albumsList.setAdapter(theAdapter);
+			
 			
 		} catch (ClientProtocolException e) {
 			// TODO Auto-generated catch block

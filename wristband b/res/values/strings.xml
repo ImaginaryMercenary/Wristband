@@ -11,7 +11,7 @@
 	<string name="about">About Wristband</string>
 	<string name="aboutcond">About</string>
 	<string name="websitest">Go to bandcamp site</string>
-	<string name="bandcamp">bandcamp</string>
+	<string name="bandcamp">More by this artist</string>
 	<string name="bcdisclaimer">The term \'Bandcamp\' is a trademark of Bandcamp,
 		Inc. This application uses the Bandcamp API but is not endorsed or
 		certified by Bandcamp, Inc.</string>
