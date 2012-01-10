@@ -1,0 +1,13 @@
+***************************************
+WRISTBAND FOR ANDROID
+***************************************
+Allan Pichardo 2012
+
+Wristband is an Android application that uses your GPS location to find local shows,
+compile a playlist of local music, and give you a map to the venue.
+
+Wristband uses the SongKick and Bandcamp APIs to accomplish this but is not 
+associated with or endorsed by any of these companies.
+
+The aim of wristband is to connect fans of local music and bands that they would 
+otherwise have never heard of.  You might find something you like.
