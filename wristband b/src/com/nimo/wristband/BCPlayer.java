@@ -110,14 +110,14 @@ public class BCPlayer extends Activity{
 		String tm = timeList[i];
 		String desc;
 		if(sn == null){
-			if(!(tm == null))
+			if(tm != null)
 				desc = bn + " at " + vn + " at " + tm;
 			else
 				desc = bn + " at " + vn;
 		}
 
 		else{
-			if(!(tm == null))
+			if(tm != null)
 				desc = bn + " - '" + sn + "' at " + vn + " at " + tm;
 			else
 				desc = bn + " - '" + sn + "' at " + vn;
