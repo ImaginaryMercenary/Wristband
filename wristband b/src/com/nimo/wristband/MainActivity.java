@@ -92,7 +92,7 @@ public class MainActivity extends Activity implements OnClickListener{
 		public void onClick(View v) {
 			// open a date dialog and
 			// return the date.
-			dateDialog = new DatePickerDialog(v.getContext(), this, calendar.get(Calendar.YEAR),calendar.get(Calendar.MONTH+1),calendar.get(Calendar.DATE));
+			dateDialog = new DatePickerDialog(v.getContext(), this, calendar.get(Calendar.YEAR),calendar.get(Calendar.MONTH)+1,calendar.get(Calendar.DATE));
 			dateDialog.show(); 
 			
 		}
@@ -100,8 +100,26 @@ public class MainActivity extends Activity implements OnClickListener{
 		public void onDateSet(DatePicker view, int year, int monthOfYear,
 				int dayOfMonth) {
 			date = String.valueOf(year) + "-" + String.valueOf(monthOfYear) + "-" + String.valueOf(dayOfMonth);
-			dateText.setText(date);
+			dateText.setText(formatDate(year,monthOfYear,dayOfMonth));
 			
+			
+		}
+		
+		private String formatDate(int year, int month, int day){
+			int D = day;
+			Log.i("D",String.valueOf(D));
+			int M = month;
+			Log.i("M",String.valueOf(M));
+			int Y = year;
+			Log.i("Y",String.valueOf(Y));
+			String MM = "0" + M;
+		    MM = MM.substring(MM.length()-2, MM.length()); 
+		    String DD = "0" + D; 
+		    DD = DD.substring(DD.length()-2, DD.length()); 
+		    
+			String theDate = String.valueOf(Y) + "-" + MM + "-" + DD;
+			date = MM + "/" + DD + "/" + String.valueOf(Y);
+			return theDate;
 			
 		}
     	
@@ -126,8 +144,8 @@ public class MainActivity extends Activity implements OnClickListener{
         	int ndx = addresses.get(0).getMaxAddressLineIndex();
         	cityText.setText(addresses.get(0).getAddressLine(ndx-1));
         }
-        date = getTodaysDate();
-        dateText.setText(date);
+        //date = getTodaysDate();
+        dateText.setText(getTodaysDate());
     }
     
     @Override
@@ -416,7 +434,7 @@ public void onClick(View arg0) {
 	if(UtilityBelt.isDataConnected(getApplicationContext()) && GPS != null){
 		//Data is enabled. Proceed.
 		
-		String theQuery = makeQueryString(date,getCoordString(GPS));
+		String theQuery = makeQueryString(dateText.getText().toString(),getCoordString(GPS));
 		new RetrieveData().execute(theQuery);
 		//return true;
 	}
