@@ -79,9 +79,15 @@ public class MainActivity extends Activity implements OnClickListener{
         
         //Get the date and the city name to fill the
         //edit text views
-        setEverythingUp(savedInstanceState);
+        
         
         buttonImage.setOnClickListener(this);
+        
+        if(UtilityBelt.isDataConnected(getApplicationContext()))
+        	setEverythingUp(savedInstanceState);
+        else{
+        	Toast.makeText(this, "Wristband requires a data connection. Check your settings and try again.", Toast.LENGTH_LONG);
+        }
         	
     }
     

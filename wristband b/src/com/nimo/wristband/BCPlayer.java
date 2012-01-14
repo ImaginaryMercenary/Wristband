@@ -7,7 +7,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.net.URLConnection;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -152,15 +151,26 @@ public class BCPlayer extends Activity{
 	        	
 	        	//Launch Maps for directions
 	        	double lat = coordList[i][0];
-	        	double lng = coordList[i][0];
+	        	double lng = coordList[i][1];
+	        	//List<Address> addresses = null; 
+	        	//List<Address> locations = null;
 	        	if(!(lat == 0.0 && lng == 0.0)){
+	        	//	Geocoder geocoder = new Geocoder(this, Locale.getDefault());
+	        		
+	        	//	try {
+				//		addresses = geocoder.getFromLocation(lat, lng, 1);
+				//		locations = geocoder.getFromLocation(MainActivity.GPS[0], MainActivity.GPS[1], 1);
+				//	} catch (IOException e) {
+				//		// TODO Auto-generated catch block
+				//		e.printStackTrace();
+				//	}
 	        		Intent intent = new Intent(android.content.Intent.ACTION_VIEW, 
 	        		Uri.parse("http://maps.google.com/maps?saddr="+MainActivity.GPS[0]+","+MainActivity.GPS[1]+"&daddr="+lat+","+lng));
 	        		startActivity(intent);
 	        	}
 	        	else{
 	        		//No address
-	        		Toast.makeText(this,"Sorry, there was no address provided for this show.",Toast.LENGTH_SHORT);
+	        		Toast.makeText(BCPlayer.bcp,"Sorry, there was no address provided for this show.",Toast.LENGTH_SHORT);
 	        	}
 	                            break;	        
 	        case R.id.website: 
