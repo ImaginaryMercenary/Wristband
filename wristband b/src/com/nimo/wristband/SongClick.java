@@ -39,14 +39,14 @@ public class SongClick implements OnItemLongClickListener{
 			String desc;
 			if(sn == null){
 				if(tm != null)
-					desc = bn + " at " + vn + " at " + tm;
+					desc = bn + " at " + vn;
 				else
 					desc = bn + " at " + vn;
 			}
 
 			else{
 				if(tm != null)
-					desc = bn + " - '" + sn + "' at " + vn + " at " + tm;
+					desc = bn + " - '" + sn + "' at " + vn;
 				else
 					desc = bn + " - '" + sn + "' at " + vn;
 			}
@@ -192,14 +192,14 @@ public class SongClick implements OnItemLongClickListener{
 			String desc;
 			if(sn == null){
 				if(tm != null)
-					desc = bn + " at " + vn + " at " + tm;
+					desc = bn + " at " + vn;
 				else
 					desc = bn + " at " + vn;
 			}
 
 			else{
 				if(tm != null)
-					desc = bn + " - '" + sn + "' at " + vn + " at " + tm;
+					desc = bn + " - '" + sn + "' at " + vn;
 				else
 					desc = bn + " - '" + sn + "' at " + vn;
 			}

@@ -16,8 +16,8 @@
 		Inc. This application uses the Bandcamp API but is not endorsed or
 		certified by Bandcamp, Inc.</string>
 	<string name="aboutMessage">Wristband uses the SongKick and Bandcamp APIs to
-		help you discover shows happening in your area.</string>
-	<string name="app_version">0.7.5 beta 3</string>
+		help you discover shows happening in your area.  Menu icons by www.androidicons.com.</string>
+	<string name="app_version">0.7.5 beta 4</string>
 	<string name="copyright">Copyright 2012 Allan Pichardo.</string>
 	<string name="cityhint">Your City</string>
 	<string name="datelabel">Date:</string>

@@ -35,7 +35,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.Window;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -62,7 +61,7 @@ public class MainActivity extends Activity implements OnClickListener{
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        //requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.newmain);
                         
         cityText = (EditText)findViewById(R.id.cityText);
@@ -84,7 +83,7 @@ public class MainActivity extends Activity implements OnClickListener{
         buttonImage.setOnClickListener(this);
         
         if(UtilityBelt.isDataConnected(getApplicationContext()))
-        	setEverythingUp(savedInstanceState);
+        	setEverythingUp();
         else{
         	Toast.makeText(this, "Wristband requires a data connection. Check your settings and try again.", Toast.LENGTH_LONG);
         }
@@ -132,7 +131,7 @@ public class MainActivity extends Activity implements OnClickListener{
     }
     
     
-    private void setEverythingUp(Bundle savedInstanceState){
+    private void setEverythingUp(){
     	getGPS();
         List<Address> addresses = null;
         if(GPS != null){
@@ -142,10 +141,11 @@ public class MainActivity extends Activity implements OnClickListener{
         	} catch (IOException e) {
         		//Error, start again
         		Toast.makeText(getApplicationContext(), "There was an error retrieving your location.",Toast.LENGTH_SHORT);
-        		onCreate(savedInstanceState);
+        		//onCreate(savedInstanceState);
+        		
         	}
         }
-        if(!addresses.isEmpty())
+        if(addresses != null)
         {
         	int ndx = addresses.get(0).getMaxAddressLineIndex();
         	cityText.setText(addresses.get(0).getAddressLine(ndx-1));
