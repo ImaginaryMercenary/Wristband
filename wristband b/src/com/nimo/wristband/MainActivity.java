@@ -3,6 +3,7 @@ package com.nimo.wristband;
 import java.io.IOException;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 import java.util.Vector;
 
 import org.apache.http.HttpEntity;
@@ -17,9 +18,12 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.Activity;
+import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -30,16 +34,21 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.Window;
-import android.view.View.OnLongClickListener;
-import android.widget.TextView;
+import android.widget.DatePicker;
+import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
-public class MainActivity extends Activity implements OnLongClickListener{
+public class MainActivity extends Activity implements OnClickListener{
 	
 	public final String SK_KEY = "plPE4X1rCdADL3A3";
 	
-	TextView mainTextView;
+	//TextView mainTextView;
+	EditText cityText;
+	EditText dateText;
+	ImageView buttonImage;
 	Calendar calendar;
 	public static SKEvent[] allTheEvents;
 	public static ProgressDialog progress;
@@ -47,21 +56,78 @@ public class MainActivity extends Activity implements OnLongClickListener{
 	private Intent i;
 	public static String date;
 	private static double[] GPS;
+	DatePickerDialog dateDialog;
 				
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
-        setContentView(R.layout.main);
+        setContentView(R.layout.newmain);
                         
-        mainTextView = (TextView)findViewById(R.id.mainTextView);
-        mainTextView.setLongClickable(true);
-        mainTextView.setOnLongClickListener(this);
+        cityText = (EditText)findViewById(R.id.cityText);
+        cityText.setEnabled(false);
+        cityText.setFocusable(false);
+        dateText = (EditText)findViewById(R.id.dateText);
+        dateText.setOnClickListener(new DateListener());
+        buttonImage = (ImageView)findViewById(R.id.buttonImage);
+        
         progress = new ProgressDialog(this);
         BCPlayer.trimCache(getApplicationContext());
         
         calendar = Calendar.getInstance();
+        
+        //Get the date and the city name to fill the
+        //edit text views
+        setEverythingUp(savedInstanceState);
+        
+        buttonImage.setOnClickListener(this);
+        	
+    }
+    
+    
+    
+    public class DateListener implements OnClickListener, DatePickerDialog.OnDateSetListener{
+
+		public void onClick(View v) {
+			// open a date dialog and
+			// return the date.
+			dateDialog = new DatePickerDialog(v.getContext(), this, calendar.get(Calendar.YEAR),calendar.get(Calendar.MONTH+1),calendar.get(Calendar.DATE));
+			dateDialog.show(); 
+			
+		}
+
+		public void onDateSet(DatePicker view, int year, int monthOfYear,
+				int dayOfMonth) {
+			date = String.valueOf(year) + "-" + String.valueOf(monthOfYear) + "-" + String.valueOf(dayOfMonth);
+			dateText.setText(date);
+			
+			
+		}
+    	
+    }
+    
+    
+    private void setEverythingUp(Bundle savedInstanceState){
+    	getGPS();
+        List<Address> addresses = null;
+        if(GPS != null){
+        	Geocoder geocoder = new Geocoder(this, Locale.getDefault());
+        	try {
+        		addresses = geocoder.getFromLocation(GPS[0], GPS[1], 1);
+        	} catch (IOException e) {
+        		//Error, start again
+        		Toast.makeText(getApplicationContext(), "There was an error retrieving your location.",Toast.LENGTH_SHORT);
+        		onCreate(savedInstanceState);
+        	}
+        }
+        if(!addresses.isEmpty())
+        {
+        	int ndx = addresses.get(0).getMaxAddressLineIndex();
+        	cityText.setText(addresses.get(0).getAddressLine(ndx-1));
+        }
+        date = getTodaysDate();
+        dateText.setText(date);
     }
     
     @Override
@@ -343,4 +409,28 @@ public class RetrieveData extends AsyncTask<String, Integer, SKEvent[]>{
 
 
 	}
+
+public void onClick(View arg0) {
+	//The button was clicked, execute
+	
+	if(UtilityBelt.isDataConnected(getApplicationContext()) && GPS != null){
+		//Data is enabled. Proceed.
+		
+		String theQuery = makeQueryString(date,getCoordString(GPS));
+		new RetrieveData().execute(theQuery);
+		//return true;
+	}
+	else{
+		//Data disabled. Warn user.
+		String disco = "A connection to the internet is required to proceed. Please check " +
+				"your wireless settings and try again.";
+		
+		Context context = getApplicationContext();
+		int duration = Toast.LENGTH_SHORT;
+
+		Toast.makeText(context, disco, duration).show();
+		//return false;
+	}
+	
+}
 }

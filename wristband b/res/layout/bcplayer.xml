@@ -3,15 +3,14 @@
     style="@style/textColor"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="#000"
+    android:background="@drawable/background"
     android:orientation="vertical" >
 
 	<LinearLayout
 	    android:id="@+id/linearLayout1"
 	    android:layout_width="fill_parent"
 	    android:layout_height="wrap_content"
-	    android:layout_weight=".15"
-	    android:background="#000" >
+	    android:layout_weight=".15" >
 
 		<TextView
 		    android:id="@+id/showDateText"
@@ -22,10 +21,10 @@
 		    android:gravity="right"
 		    android:paddingTop="5dip"
 		    android:text="TextView"
-		    android:textColor="#fff"
+		    android:textColor="#cecc00"
 		    android:textSize="20dip"
 		    android:textStyle="bold"
-		    android:typeface="serif" >
+		    android:typeface="monospace" >
 
 </TextView>
 	</LinearLayout>
@@ -44,33 +43,27 @@
 			android:layout_marginTop="20dip" android:layout_marginBottom="20dip"></com.nimo.wristband.CoverFlow>
 
 	</LinearLayout>
-
+
 	<LinearLayout
 	    android:id="@+id/songTitleLayout"
 	    android:layout_width="match_parent"
 	    android:layout_height="wrap_content"
-	    android:layout_weight=".15" >
-
+	    android:layout_gravity="center"
+	    android:layout_weight=".15" android:background="#cecc00">
+
 	    <TextView
 	        android:id="@+id/nameText"
-	        android:layout_width="0dp"
-	        android:layout_height="wrap_content"
-	        android:layout_gravity="center_horizontal"
+	        android:layout_width="match_parent"
+	        android:layout_height="match_parent"
+	        android:layout_gravity="center"
 	        android:layout_marginBottom="5dip"
 	        android:layout_weight=".75"
 	        android:text="TextView"
-	        android:textColor="#fff"
+	        android:textColor="#000"
 	        android:textSize="14dip"
 	        android:textStyle="italic"
-	        android:typeface="serif" />
+	        android:typeface="monospace" />
 
-	    <LinearLayout
-	        android:id="@+id/linearLayout3"
-	        android:layout_width="0dp"
-	        android:layout_height="match_parent"
-	        android:layout_weight=".25"
-	        android:orientation="vertical" >
-	    </LinearLayout>
 	</LinearLayout>
 
 	<LinearLayout

@@ -19,4 +19,7 @@
 		help you discover shows happening in your area.</string>
 	<string name="app_version">0.4.0 beta 1</string>
 	<string name="copyright">Copyright 2011 Allan Pichardo.</string>
+	<string name="cityhint">Your City</string>
+	<string name="datelabel">Date:</string>
+	<string name="searchbttnlabel">Search</string>
 </resources>

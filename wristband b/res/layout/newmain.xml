@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/RelativeLayout1"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/background"
+    android:orientation="vertical" >
+
+    <ImageView
+        android:id="@+id/imageView1"
+        android:contentDescription="Wristband"
+        android:layout_width="200dp"
+        android:layout_height="70dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:src="@drawable/wlogo" />
+
+    <RelativeLayout
+        android:id="@+id/relativeLayout2"
+        android:layout_width="300dp"
+        android:layout_height="250dp"
+        android:layout_centerInParent="true"
+        android:background="@drawable/poster" >
+
+        <EditText
+            android:id="@+id/cityText"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="66dp"
+            android:hint="@string/cityhint"
+            android:inputType="textPostalAddress"
+            android:singleLine="true" >
+
+            <requestFocus />
+        </EditText>
+
+        <EditText
+            android:id="@+id/dateText"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/cityText"
+            android:layout_below="@+id/cityText"
+            android:layout_marginTop="29dp"
+            android:inputType="date|textPostalAddress"
+            android:singleLine="true" />
+
+    </RelativeLayout>
+
+    <ImageView
+        android:id="@+id/buttonImage"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:src="@drawable/gobutton" />
+
+</RelativeLayout>
