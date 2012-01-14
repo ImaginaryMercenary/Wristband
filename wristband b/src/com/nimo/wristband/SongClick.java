@@ -35,11 +35,21 @@ public class SongClick implements OnItemLongClickListener{
 			String bn = BCPlayer.nameList[i];
 			String sn = BCPlayer.titleList[i];
 			String vn = BCPlayer.venueList[i];
+			String tm = BCPlayer.timeList[i];
 			String desc;
-			if(sn == null)
-				desc = bn + " at " + vn;
-			else
-				desc = bn + " - '" + sn + "' at " + vn;
+			if(sn == null){
+				if(!(tm == null))
+					desc = bn + " at " + vn + " at " + tm;
+				else
+					desc = bn + " at " + vn;
+			}
+
+			else{
+				if(!(tm == null))
+					desc = bn + " - '" + sn + "' at " + vn + " at " + tm;
+				else
+					desc = bn + " - '" + sn + "' at " + vn;
+			}
 			BCPlayer.nameText.setText(desc);
 			//BCPlayer.mPlayer.prepareAsync();
 			//BCPlayer.titleText.setVisibility(View.VISIBLE);
@@ -180,10 +190,19 @@ public class SongClick implements OnItemLongClickListener{
 			String vn = BCPlayer.venueList[i];
 			String tm = BCPlayer.timeList[i];
 			String desc;
-			if(sn == null)
-				desc = bn + " at " + vn + " at " + tm;
-			else
-				desc = bn + " - '" + sn + "' at " + vn + " at " + tm;
+			if(sn == null){
+				if(!(tm == null))
+					desc = bn + " at " + vn + " at " + tm;
+				else
+					desc = bn + " at " + vn;
+			}
+
+			else{
+				if(!(tm == null))
+					desc = bn + " - '" + sn + "' at " + vn + " at " + tm;
+				else
+					desc = bn + " - '" + sn + "' at " + vn;
+			}
 			BCPlayer.nameText.setText(desc);
 			if(BCPlayer.mPlayer.isPlaying())
 				BCPlayer.mediaController1.show();

@@ -55,7 +55,7 @@ public class MainActivity extends Activity implements OnClickListener{
 	public static boolean isReady = false;
 	private Intent i;
 	public static String date;
-	private static double[] GPS;
+	public static double[] GPS;
 	DatePickerDialog dateDialog;
 				
     /** Called when the activity is first created. */

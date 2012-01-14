@@ -8,12 +8,16 @@ import java.io.InputStream;
 import java.net.URL;
 import java.net.URLConnection;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -32,6 +36,8 @@ import android.widget.VideoView;
 import com.nimo.wristband.SongClick.Prep;
 
 public class BCPlayer extends Activity{
+	
+	private String BCKEY = "baugihungrmordaafstanda";
 	
 	private String[] artList;
 	private String[] streamList;
@@ -104,10 +110,19 @@ public class BCPlayer extends Activity{
 		String vn = BCPlayer.venueList[i];
 		String tm = timeList[i];
 		String desc;
-		if(sn == null)
-			desc = bn + " at " + vn + " at " + tm;
-		else
-			desc = bn + " - '" + sn + "' at " + vn + " at " + tm;
+		if(sn == null){
+			if(!(tm == null))
+				desc = bn + " at " + vn + " at " + tm;
+			else
+				desc = bn + " at " + vn;
+		}
+
+		else{
+			if(!(tm == null))
+				desc = bn + " - '" + sn + "' at " + vn + " at " + tm;
+			else
+				desc = bn + " - '" + sn + "' at " + vn;
+		}
 		BCPlayer.nameText.setText(desc);
         bcp = this.getApplicationContext();
         Toast instruction = Toast.makeText(bcp, "Long-press an image to play/stop", Toast.LENGTH_LONG);
@@ -129,23 +144,47 @@ public class BCPlayer extends Activity{
 	        	//Toast.makeText(this, "will be implemented on next version", Toast.LENGTH_LONG).show();
 	        	//Show Map;
 	        	
-	        	Intent m = new Intent(BCPlayer.this,Directions.class);
-	        	m.putExtra("lat", coordList[i][0]);
-	        	m.putExtra("lng", coordList[i][1]);
-	        	m.putExtra("position", i);
-	        	startActivity(m);
-	                            break;
+	        	//Intent m = new Intent(BCPlayer.this,Directions.class);
+	        	//m.putExtra("lat", coordList[i][0]);
+	        	//m.putExtra("lng", coordList[i][1]);
+	        	//m.putExtra("position", i);
+	        	//startActivity(m);
+	        	
+	        	//Launch Maps for directions
+	        	double lat = coordList[i][0];
+	        	double lng = coordList[i][0];
+	        	if(!(lat == 0.0 && lng == 0.0)){
+	        		Intent intent = new Intent(android.content.Intent.ACTION_VIEW, 
+	        		Uri.parse("http://maps.google.com/maps?saddr="+MainActivity.GPS[0]+","+MainActivity.GPS[1]+"&daddr="+lat+","+lng));
+	        		startActivity(intent);
+	        	}
+	        	else{
+	        		//No address
+	        		Toast.makeText(this,"Sorry, there was no address provided for this show.",Toast.LENGTH_SHORT);
+	        	}
+	                            break;	        
 	        case R.id.website: 
 	        	//Toast.makeText(this, "This will take you to a website" +
 	        	//		"", Toast.LENGTH_LONG).show();
 	        	//int i = BCPlayer.coverFlow.getSelectedItemPosition();
 	        	Log.i("bandcamp","opening intent");
-	        	Intent p = new Intent(BCPlayer.this,Profile.class);
-	        	p.putExtra("band_name", nameList[i]);
-	        	p.putExtra("band_id", idList[i]);
-	        	p.putExtra("album_art", artList[i]);
-	        	Log.d(nameList[i],String.valueOf(idList[i]));
-	        	startActivity(p);
+	        	//Intent p = new Intent(BCPlayer.this,Profile.class);
+	        	//p.putExtra("band_name", nameList[i]);
+	        	//p.putExtra("band_id", idList[i]);
+	        	//p.putExtra("album_art", artList[i]);
+	        	//Log.d(nameList[i],String.valueOf(idList[i]));
+	        	//startActivity(p);
+	        	JSONObject bandInfo = UtilityBelt.retrieveJSON("http://api.bandcamp.com/api/band/3/info?key="+BCKEY+"&band_id="+idList[i]);
+	        	
+			Intent browserIntent;
+			try {
+				browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(bandInfo.getString("url")));
+				startActivity(browserIntent);
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+	        	
 	                            break;
 	        case R.id.about:
 	        	Intent a = new Intent(BCPlayer.this,AboutActivity.class);

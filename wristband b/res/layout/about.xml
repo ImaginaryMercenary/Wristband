@@ -16,9 +16,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="10dip"
-            android:background="@string/yeller"
+            android:background="#cecc00"
             android:text="@string/app_name"
-            android:textColor="@string/black"
+            android:textColor="#000000"
             android:textSize="30dip"
             android:typeface="serif" >
         </TextView>
@@ -28,9 +28,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="10dip"
-            android:background="@string/yeller"
+            android:background="#cecc00"
             android:text="@string/app_version"
-            android:textColor="@string/black"
+            android:textColor="#0000"
             android:textStyle="italic"
             android:typeface="serif" >
         </TextView>
@@ -41,7 +41,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="0.1"
-        android:background="@string/yeller" >
+        android:background="#cecc00" >
     </TableRow>
 
     <TextView
@@ -50,9 +50,9 @@
         android:layout_height="wrap_content"
         android:layout_margin="10dip"
         android:layout_weight="0.8"
-        android:background="@string/yeller"
+        android:background="#cecc00"
         android:text="@string/aboutMessage"
-        android:textColor="@string/black"
+        android:textColor="#000000"
         android:textSize="24dip"
         android:textStyle="bold"
         android:typeface="serif" >
@@ -63,9 +63,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="10dip"
-        android:background="@string/yeller"
+        android:background="#cecc00"
         android:text="@string/bcdisclaimer"
-        android:textColor="@string/black"
+        android:textColor="#000000"
         android:textSize="10dip"
         android:textStyle="italic"
         android:typeface="serif" >
@@ -86,9 +86,9 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:layout_weight="0.0"
-        android:background="@string/yeller"
+        android:background="#cecc00"
         android:text="@string/copyright"
-        android:textColor="@string/black"
+        android:textColor="#000000"
         android:textSize="8dip"
         android:typeface="monospace" >
     </TextView>

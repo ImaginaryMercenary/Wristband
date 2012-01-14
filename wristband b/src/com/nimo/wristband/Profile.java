@@ -14,6 +14,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.Activity;
+import android.database.DataSetObserver;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
@@ -21,9 +22,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.AbsListView;
-import android.widget.BaseExpandableListAdapter;
+import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
 import android.widget.ImageView;
+import android.widget.ListAdapter;
 import android.widget.TextView;
 
 public class Profile extends Activity {
@@ -48,15 +50,15 @@ public class Profile extends Activity {
         bandTitle = (TextView)findViewById(R.id.bandTitle);
         coverArt = (ImageView)findViewById(R.id.coverArt);
         albumsList = (ExpandableListView)findViewById(R.id.albumsList);
-        MyExpandableListAdapter theAdapter = new MyExpandableListAdapter();
-         
+        
+        albumsList.setAdapter(new MyExpandableListAdapter());
         bandTitle.setText(extras.getString("band_name"));
         Log.d("loaded","now about to get image");
         //coverArt.setImageURI(Uri.parse(extras.getString("album_art")));
         coverArt.setImageBitmap(UtilityBelt.bitmapFromNet(extras.getString("album_art")));
-        populateList(extras.getLong("band_id"));
+        //populateList(extras.getLong("band_id"));
         //Make the list
-		albumsList.setAdapter(theAdapter);
+		
 
 	}
 	
@@ -98,7 +100,7 @@ public class Profile extends Activity {
         
 	}
 
-	public class MyExpandableListAdapter extends BaseExpandableListAdapter{
+	public class MyExpandableListAdapter implements ExpandableListAdapter{
 
 		public Object getChild(int groupPosition, int childPosition) {
 			// TODO Auto-generated method stub
@@ -158,6 +160,7 @@ public class Profile extends Activity {
 			Log.i("list","generating list");
 						
 			TextView textView = getGenericView();
+			Log.i("album "+groupPosition, mAlbums[groupPosition].getAlbumTitle() + " " + mAlbums[groupPosition].getReleaseDate());
             textView.setText(mAlbums[groupPosition].getAlbumTitle() + " " + mAlbums[groupPosition].getReleaseDate());
             return textView;
 			
@@ -171,6 +174,81 @@ public class Profile extends Activity {
 		public boolean isChildSelectable(int groupPosition, int childPosition) {
 			// TODO Auto-generated method stub
 			return false;
+		}
+
+		public int getCount() {
+			// TODO Auto-generated method stub
+			return 0;
+		}
+
+		public Object getItem(int arg0) {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
+		public long getItemId(int arg0) {
+			// TODO Auto-generated method stub
+			return 0;
+		}
+
+		public int getItemViewType(int arg0) {
+			// TODO Auto-generated method stub
+			return 0;
+		}
+
+		public View getView(int arg0, View arg1, ViewGroup arg2) {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
+		public int getViewTypeCount() {
+			// TODO Auto-generated method stub
+			return 0;
+		}
+
+		public boolean isEmpty() {
+			// TODO Auto-generated method stub
+			return false;
+		}
+
+		public void registerDataSetObserver(DataSetObserver arg0) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		public void unregisterDataSetObserver(DataSetObserver arg0) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		public boolean areAllItemsEnabled() {
+			// TODO Auto-generated method stub
+			return false;
+		}
+
+		public boolean isEnabled(int position) {
+			// TODO Auto-generated method stub
+			return false;
+		}
+
+		public long getCombinedChildId(long groupId, long childId) {
+			// TODO Auto-generated method stub
+			return 0;
+		}
+
+		public long getCombinedGroupId(long groupId) {
+			// TODO Auto-generated method stub
+			return 0;
+		}
+
+		public void onGroupCollapsed(int groupPosition) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		public void onGroupExpanded(int groupPosition) {
+			// TODO Auto-generated method stub
+			
 		}
 		
 	}

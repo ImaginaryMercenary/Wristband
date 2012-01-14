@@ -6,6 +6,17 @@ import java.io.InputStream;
 import java.net.URL;
 import java.net.URLConnection;
 
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.util.EntityUtils;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -57,6 +68,36 @@ public class UtilityBelt {
              Log.e("DEBUGTAG", "Remtoe Image Exception", e);
              return null;
      }
+	}
+	
+	public static JSONObject retrieveJSON(String query){
+		String theQuery = query;
+		Log.d("bc query", theQuery);
+		HttpClient client = new DefaultHttpClient();
+		
+		HttpGet get = new HttpGet(theQuery);
+		HttpResponse responseGet;
+		JSONObject response = null;
+		try {
+			//Retrieve the JSON 
+			responseGet = client.execute(get);
+			HttpEntity resEntityGet = responseGet.getEntity();
+			String res = EntityUtils.toString(resEntityGet);
+			Log.d("JSON response",res);
+			response = new JSONObject(res);
+			
+		} catch (ClientProtocolException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// check if the data is enabled
+			e.printStackTrace();
+		} catch (JSONException e) {
+			// JSON parsing error
+			e.printStackTrace();
+		}
+		
+		return response;
 	}
 	
 	
