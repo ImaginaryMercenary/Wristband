@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 	<item android:id="@+id/mapItem" android:title="Directions"
-		android:titleCondensed="@string/mapcond" android:icon="@drawable/ic_menu_globe"></item>
-	<item android:id="@+id/website" android:title="Go to Bandcamp" android:titleCondensed="@string/bandcamp" android:icon="@drawable/ic_menu_music"></item>
-	<item android:id="@+id/about" android:title="About Wristband" android:titleCondensed="@string/aboutcond" android:icon="@drawable/ic_menu_light"></item>
+		android:titleCondensed="@string/mapcond" android:icon="@android:drawable/ic_menu_directions"></item>
+	<item android:id="@+id/website" android:title="Go to Bandcamp" android:titleCondensed="@string/bandcamp" android:icon="@android:drawable/ic_menu_more"></item>
+	<item android:id="@+id/about" android:title="About Wristband" android:titleCondensed="@string/aboutcond" android:icon="@android:drawable/ic_menu_info_details"></item>
 
 </menu>

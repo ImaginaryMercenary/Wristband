@@ -56,6 +56,7 @@ public class MainActivity extends Activity implements OnClickListener{
 	public static String date;
 	public static double[] GPS;
 	DatePickerDialog dateDialog;
+	Geocoder geocoder;
 				
     /** Called when the activity is first created. */
     @Override
@@ -85,12 +86,37 @@ public class MainActivity extends Activity implements OnClickListener{
         if(UtilityBelt.isDataConnected(getApplicationContext()))
         	setEverythingUp();
         else{
-        	Toast.makeText(this, "Wristband requires a data connection. Check your settings and try again.", Toast.LENGTH_LONG);
+        	Toast.makeText(this, "Wristband requires a data connection. Check your settings and try again.", Toast.LENGTH_LONG).show();
         }
         	
     }
     
-    
+    public class CityListener implements OnClickListener{
+
+		public void onClick(View arg0) {
+			//try GPS again
+			getGPS();
+			Log.i("gps", GPS[0]+","+GPS[1]);
+	        List<Address> addresses = null;
+	        if(GPS != null){
+	        	geocoder = new Geocoder(arg0.getContext());
+	        	try {
+	        		addresses = geocoder.getFromLocation(GPS[0], GPS[1], 1);
+	        	} catch (IOException e) {
+	        		//Error, start again
+	        		Toast.makeText(getApplicationContext(), "There was an error retrieving your city, but I have your GPS coordinates. You can continue.",Toast.LENGTH_LONG).show();
+	        		//onCreate(savedInstanceState);
+	        		
+	        	}
+	        }
+	        if(addresses != null)
+	        {
+	        	int ndx = addresses.get(0).getMaxAddressLineIndex();
+	        	cityText.setText(addresses.get(0).getAddressLine(ndx-1));
+	        }
+		}
+    	
+    }
     
     public class DateListener implements OnClickListener, DatePickerDialog.OnDateSetListener{
 
@@ -135,12 +161,12 @@ public class MainActivity extends Activity implements OnClickListener{
     	getGPS();
         List<Address> addresses = null;
         if(GPS != null){
-        	Geocoder geocoder = new Geocoder(this, Locale.getDefault());
+        	geocoder = new Geocoder(this.getApplicationContext(), Locale.getDefault());
         	try {
         		addresses = geocoder.getFromLocation(GPS[0], GPS[1], 1);
         	} catch (IOException e) {
         		//Error, start again
-        		Toast.makeText(getApplicationContext(), "There was an error retrieving your location.",Toast.LENGTH_SHORT);
+        		Toast.makeText(getApplicationContext(), "There was an error retrieving your city, but I have your GPS coordinates. You can continue.",Toast.LENGTH_SHORT).show();
         		//onCreate(savedInstanceState);
         		
         	}

@@ -3,6 +3,6 @@
 	<item android:titleCondensed="@string/aboutcond" 
 	    android:title="About Wristband" 
 	    android:id="@+id/mainAbout"
-	    android:icon="@drawable/ic_menu_light"></item>
+	    android:icon="@android:drawable/ic_menu_info_details"></item>
 
 </menu>

@@ -170,7 +170,7 @@ public class BCPlayer extends Activity{
 	        	}
 	        	else{
 	        		//No address
-	        		Toast.makeText(BCPlayer.bcp,"Sorry, there was no address provided for this show.",Toast.LENGTH_SHORT);
+	        		Toast.makeText(BCPlayer.bcp,"Sorry, there was no address provided for this show.",Toast.LENGTH_SHORT).show();
 	        	}
 	                            break;	        
 	        case R.id.website: 
