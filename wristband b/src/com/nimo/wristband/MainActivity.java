@@ -123,15 +123,15 @@ public class MainActivity extends Activity implements OnClickListener{
 		public void onClick(View v) {
 			// open a date dialog and
 			// return the date.
-			dateDialog = new DatePickerDialog(v.getContext(), this, calendar.get(Calendar.YEAR),calendar.get(Calendar.MONTH)+1,calendar.get(Calendar.DATE));
+			dateDialog = new DatePickerDialog(v.getContext(), this, calendar.get(Calendar.YEAR),calendar.get(Calendar.MONTH),calendar.get(Calendar.DATE));
 			dateDialog.show(); 
 			
 		}
 
 		public void onDateSet(DatePicker view, int year, int monthOfYear,
 				int dayOfMonth) {
-			date = String.valueOf(year) + "-" + String.valueOf(monthOfYear) + "-" + String.valueOf(dayOfMonth);
-			dateText.setText(formatDate(year,monthOfYear,dayOfMonth));
+			date = String.valueOf(year) + "-" + String.valueOf(monthOfYear+1) + "-" + String.valueOf(dayOfMonth);
+			dateText.setText(formatDate(year,monthOfYear+1,dayOfMonth));
 			
 			
 		}
