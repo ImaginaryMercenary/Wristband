@@ -83,7 +83,7 @@ public class MainActivity extends Activity implements OnClickListener{
         
         buttonImage.setOnClickListener(this);
         
-        if(UtilityBelt.isDataConnected(getApplicationContext()))
+        if(UtilityBelt.haveInternet(getApplicationContext()))
         	setEverythingUp();
         else{
         	Toast.makeText(this, "Wristband requires a data connection. Check your settings and try again.", Toast.LENGTH_LONG).show();
@@ -232,7 +232,7 @@ public class MainActivity extends Activity implements OnClickListener{
 	public boolean onLongClick(View v) {
 		// Search
 		
-		if(UtilityBelt.isDataConnected(getApplicationContext())){
+		if(UtilityBelt.haveInternet(getApplicationContext())){
 			//Data is enabled. Proceed.
 			getGPS();
 			String theQuery = makeQueryString(getTodaysDate(),getCoordString(GPS));
@@ -463,7 +463,7 @@ public class RetrieveData extends AsyncTask<String, Integer, SKEvent[]>{
 public void onClick(View arg0) {
 	//The button was clicked, execute
 	
-	if(UtilityBelt.isDataConnected(getApplicationContext()) && GPS != null){
+	if(UtilityBelt.haveInternet(getApplicationContext()) && GPS != null){
 		//Data is enabled. Proceed.
 		
 		String theQuery = makeQueryString(dateText.getText().toString(),getCoordString(GPS));
