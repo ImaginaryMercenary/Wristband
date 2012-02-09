@@ -3,6 +3,7 @@ package com.nimo.wristband;
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 
@@ -88,9 +89,10 @@ public class UtilityBelt {
              return bm;
      } catch (IOException e) {
              
-             Log.e("DEBUGTAG", "Remtoe Image Exception", e);
+             Log.d("image error", "using wristband icon");
              return null;
      }
+     
 	}
 	
 	public static JSONObject retrieveJSON(String query){

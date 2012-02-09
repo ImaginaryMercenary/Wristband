@@ -26,9 +26,12 @@ public class SongClick implements OnItemLongClickListener{
 	
 	public void playMusic(){
 		int i = BCPlayer.coverFlow.getSelectedItemPosition();
-		Log.d("item"+String.valueOf(i),streams[i]);
+		//Log.d("item"+String.valueOf(i),streams[i]);
 		try {
 			playing = i;
+			if(streams[i] == null)
+				Toast.makeText(BCPlayer.bcp, "Sorry, unable to retrieve this music.", Toast.LENGTH_SHORT).show();
+			else{
 			Uri link = Uri.parse(streams[i]);
 			BCPlayer.mPlayer.setVideoURI(link);
 			
@@ -55,9 +58,11 @@ public class SongClick implements OnItemLongClickListener{
 			//BCPlayer.titleText.setVisibility(View.VISIBLE);
 			Toast play = Toast.makeText(BCPlayer.bcp, "Playing", Toast.LENGTH_SHORT);
 			play.show();
+			}
 		} catch (IllegalArgumentException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			Toast.makeText(BCPlayer.bcp, "Sorry, unable to retrieve this music.", Toast.LENGTH_SHORT).show();
 			
 		} catch (IllegalStateException e) {
 			// TODO Auto-generated catch block

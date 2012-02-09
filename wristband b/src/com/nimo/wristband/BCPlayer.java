@@ -17,6 +17,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -417,34 +418,46 @@ public class BCPlayer extends Activity{
 	     public View getView(int position, View convertView, ViewGroup parent) {
 
 	      //Use this code if you want to load from resources
-	         ImageView i = new ImageView(mContext);
+	         final ImageView i = new ImageView(mContext);
 	         
-	         try {
-                 /* Open a new URL and get the InputStream to load data from it. */
+	         /*try {
+                  Open a new URL and get the InputStream to load data from it. 
                  URL aURL = new URL(albumArt[position]);
                  URLConnection conn = aURL.openConnection();
                  conn.connect();
                  InputStream is = conn.getInputStream();
-                 /* Buffered is always good for a performance plus. */
+                  Buffered is always good for a performance plus. 
                  BufferedInputStream bis = new BufferedInputStream(is);
-                 /* Decode url-data to a bitmap. */
+                  Decode url-data to a bitmap. 
                  Bitmap bm = BitmapFactory.decodeStream(bis);
                  bis.close();
                  is.close();
-                 /* Apply the Bitmap to the ImageView that will be returned. */
+                  Apply the Bitmap to the ImageView that will be returned. 
                  i.setImageBitmap(bm);
          } catch (IOException e) {
                  i.setImageResource(R.drawable.wbicon);
                  Log.e("DEBUGTAG", "Remtoe Image Exception", e);
-         }
-	         
+         }*/
+	         class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
+	             protected Bitmap doInBackground(String... urls) {
+	                 return UtilityBelt.bitmapFromNet(urls[0]);
+	             }
+
+	             protected void onPostExecute(Bitmap result) {
+	                 if(result != null)
+	                	 i.setImageBitmap(result);
+	                 else
+	                	 i.setImageResource(R.drawable.wbicon);
+	             }
+	         }
+	         new DownloadImageTask().execute(albumArt[position]);
 	         
 	         i.setLayoutParams(new CoverFlow.LayoutParams(130, 130));
 	         i.setScaleType(ImageView.ScaleType.CENTER_INSIDE); 
 	         
 	         //Make sure we set anti-aliasing otherwise we get jaggies
-	         BitmapDrawable drawable = (BitmapDrawable) i.getDrawable();
-	         drawable.setAntiAlias(true);
+	         //BitmapDrawable drawable = (BitmapDrawable) i.getDrawable();
+	         //drawable.setAntiAlias(true);
 	         return i;
 	      
 	      //return mImages[position];

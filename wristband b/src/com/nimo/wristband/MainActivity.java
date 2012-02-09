@@ -430,10 +430,11 @@ public class RetrieveData extends AsyncTask<String, Integer, SKEvent[]>{
 						MainActivity.progress.incrementProgressBy(1);
 					}
 					//pw.dismiss();
+					return allShows;
 				}
 				else
 					return null;
-				return allShows;
+				//return allShows;
 	    
 		}
 		
@@ -447,10 +448,14 @@ public class RetrieveData extends AsyncTask<String, Integer, SKEvent[]>{
 		}
 		
 		protected void onPostExecute(SKEvent[] result){
-			MainActivity.allTheEvents = result;
-			MainActivity.progress.dismiss();
-			MainActivity.isReady = true;
-			SwitchNow();
+			if(result != null){
+				MainActivity.allTheEvents = result;
+				MainActivity.progress.dismiss();
+				MainActivity.isReady = true;
+				SwitchNow();
+			}
+			else
+				Toast.makeText(getBaseContext(), "Sorry, I could not find any shows for this particular area.", Toast.LENGTH_LONG).show();
 		}
 		
 		protected void onProgressUpdate(int integers) {
