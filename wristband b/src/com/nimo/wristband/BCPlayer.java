@@ -179,13 +179,13 @@ public class BCPlayer extends Activity{
 	        	//		"", Toast.LENGTH_LONG).show();
 	        	//int i = BCPlayer.coverFlow.getSelectedItemPosition();
 	        	Log.i("bandcamp","opening intent");
-	        	//Intent p = new Intent(BCPlayer.this,Profile.class);
-	        	//p.putExtra("band_name", nameList[i]);
-	        	//p.putExtra("band_id", idList[i]);
-	        	//p.putExtra("album_art", artList[i]);
-	        	//Log.d(nameList[i],String.valueOf(idList[i]));
-	        	//startActivity(p);
-	        	JSONObject bandInfo = UtilityBelt.retrieveJSON("http://api.bandcamp.com/api/band/3/info?key="+BCKEY+"&band_id="+idList[i]);
+	        	Intent p = new Intent(BCPlayer.this,Profile.class);
+	        	p.putExtra("band_name", nameList[i]);
+	        	p.putExtra("band_id", idList[i]);
+	        	p.putExtra("album_art", artList[i]);
+	        	Log.d(nameList[i],String.valueOf(idList[i]));
+	        	startActivity(p);
+	        	/*JSONObject bandInfo = UtilityBelt.retrieveJSON("http://api.bandcamp.com/api/band/3/info?key="+BCKEY+"&band_id="+idList[i]);
 	        	
 			Intent browserIntent;
 			try {
@@ -194,7 +194,7 @@ public class BCPlayer extends Activity{
 			} catch (JSONException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-			}
+			}*/
 	        	
 	                            break;
 	        case R.id.about:

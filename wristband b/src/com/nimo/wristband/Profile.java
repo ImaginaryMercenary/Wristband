@@ -22,10 +22,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.AbsListView;
-import android.widget.ExpandableListAdapter;
+import android.widget.BaseExpandableListAdapter;
 import android.widget.ExpandableListView;
+import android.widget.ExpandableListView.OnChildClickListener;
+import android.widget.ExpandableListView.OnGroupClickListener;
 import android.widget.ImageView;
-import android.widget.ListAdapter;
 import android.widget.TextView;
 
 public class Profile extends Activity {
@@ -58,6 +59,22 @@ public class Profile extends Activity {
         coverArt.setImageBitmap(UtilityBelt.bitmapFromNet(extras.getString("album_art")));
         //populateList(extras.getLong("band_id"));
         //Make the list
+        albumsList.setOnGroupClickListener(new OnGroupClickListener(){
+        	  public boolean onGroupClick(ExpandableListView arg0, View arg1,
+                  int groupPosition, long arg3) {
+             
+              return false;
+              }
+        });
+        albumsList.setOnChildClickListener(new OnChildClickListener(){
+
+			public boolean onChildClick(ExpandableListView arg0, View arg1,
+					int arg2, int arg3, long arg4) {
+				// TODO Auto-generated method stub
+				return false;
+			}
+        	
+        });
 		
 
 	}
@@ -100,11 +117,12 @@ public class Profile extends Activity {
         
 	}
 
-	public class MyExpandableListAdapter implements ExpandableListAdapter{
+	public class MyExpandableListAdapter extends BaseExpandableListAdapter{
+		
+		//private Album[] groups = mAlbums;
 
 		public Object getChild(int groupPosition, int childPosition) {
-			// TODO Auto-generated method stub
-			return null;
+			return mAlbums[groupPosition].getTrack(childPosition);
 		}
 		
 		public TextView getGenericView() {
@@ -122,15 +140,15 @@ public class Profile extends Activity {
         }
 
 		public long getChildId(int groupPosition, int childPosition) {
-			// TODO Auto-generated method stub
-			return 0;
+			return childPosition;
 		}
 
 		public View getChildView(int groupPosition, int childPosition,
 				boolean isLastChild, View convertView, ViewGroup parent) {
 			Log.i("list","expanded");
-			coverArt.setImageBitmap(UtilityBelt.bitmapFromNet((mAlbums[groupPosition].getArtUrl())));
-			
+			//coverArt.setImageBitmap(UtilityBelt.bitmapFromNet((mAlbums[groupPosition].getArtUrl())));
+			TextView textView = getGenericView();
+			textView.setText(mAlbums[groupPosition].getTrack(childPosition).getTitle());
 			// Need to poll bandcamp again for songs
 			return null;
 		}
@@ -147,12 +165,12 @@ public class Profile extends Activity {
 
 		public int getGroupCount() {
 			// TODO Auto-generated method stub
-			return 0;
+			return mAlbums.length;
 		}
 
 		public long getGroupId(int groupPosition) {
 			// TODO Auto-generated method stub
-			return 0;
+			return groupPosition;
 		}
 
 		public View getGroupView(int groupPosition, boolean isExpanded,
@@ -178,7 +196,7 @@ public class Profile extends Activity {
 
 		public int getCount() {
 			// TODO Auto-generated method stub
-			return 0;
+			return mAlbums.length;
 		}
 
 		public Object getItem(int arg0) {

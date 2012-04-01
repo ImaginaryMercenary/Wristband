@@ -2,6 +2,7 @@ package com.nimo.wristband;
 
 import java.util.Date;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 public class Album {
@@ -14,6 +15,7 @@ public class Album {
 	private String albumTitle;
 	private long albumId;
 	private String albumUrl;
+	private Track[] tracks;
 	
 	public Album(JSONObject album){
 		//parse the JSON
@@ -22,6 +24,18 @@ public class Album {
 		albumTitle = album.optString("title");
 		albumId = album.optLong("album_id");
 		albumUrl = album.optString("url");
+		try {
+			tracks = new Track[album.getJSONArray("tracks").length()];
+			for(int i = 0; i < tracks.length; ++i){
+				tracks[i] = new Track(album.getJSONArray("tracks").optJSONObject(i));
+			}
+		} catch (JSONException e) {
+			tracks = null;
+		}
+	}
+	
+	public Track getTrack(int i){
+		return tracks[i];
 	}
 	
 	public String getReleaseDate(){
