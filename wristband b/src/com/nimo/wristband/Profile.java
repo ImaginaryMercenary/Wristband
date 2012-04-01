@@ -15,10 +15,12 @@ import org.json.JSONObject;
 
 import android.app.Activity;
 import android.database.DataSetObserver;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.AbsListView;
@@ -27,7 +29,9 @@ import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.OnChildClickListener;
 import android.widget.ExpandableListView.OnGroupClickListener;
 import android.widget.ImageView;
+import android.widget.MediaController;
 import android.widget.TextView;
+import android.widget.VideoView;
 
 public class Profile extends Activity {
 
@@ -40,6 +44,8 @@ public class Profile extends Activity {
 	ImageView coverArt;
 	ExpandableListView albumsList;
 	
+	VideoView videoView1;
+	
 	public void onCreate(Bundle savedInstanceState) {
     	
         super.onCreate(savedInstanceState);
@@ -51,6 +57,9 @@ public class Profile extends Activity {
         bandTitle = (TextView)findViewById(R.id.bandTitle);
         coverArt = (ImageView)findViewById(R.id.coverArt);
         albumsList = (ExpandableListView)findViewById(R.id.albumsList);
+        videoView1 = (VideoView)findViewById(R.id.videoView1);
+        
+        videoView1.setMediaController(new MediaController(this));
         
         albumsList.setAdapter(new MyExpandableListAdapter());
         bandTitle.setText(extras.getString("band_name"));
@@ -62,7 +71,7 @@ public class Profile extends Activity {
         albumsList.setOnGroupClickListener(new OnGroupClickListener(){
         	  public boolean onGroupClick(ExpandableListView arg0, View arg1,
                   int groupPosition, long arg3) {
-             
+        		  coverArt.setImageBitmap(UtilityBelt.bitmapFromNet(mAlbums[groupPosition].getArtUrl()));
               return false;
               }
         });
@@ -70,7 +79,7 @@ public class Profile extends Activity {
 
 			public boolean onChildClick(ExpandableListView arg0, View arg1,
 					int arg2, int arg3, long arg4) {
-				// TODO Auto-generated method stub
+				
 				return false;
 			}
         	
@@ -143,33 +152,41 @@ public class Profile extends Activity {
 			return childPosition;
 		}
 
-		public View getChildView(int groupPosition, int childPosition,
+		public View getChildView(final int groupPosition, final int childPosition,
 				boolean isLastChild, View convertView, ViewGroup parent) {
 			Log.i("list","expanded");
 			//coverArt.setImageBitmap(UtilityBelt.bitmapFromNet((mAlbums[groupPosition].getArtUrl())));
 			TextView textView = getGenericView();
 			textView.setText(mAlbums[groupPosition].getTrack(childPosition).getTitle());
+			textView.setOnClickListener(new OnClickListener(){
+
+				public void onClick(View v) {
+					//Log.d("clicked child", String.valueOf(arg2)+" "+String.valueOf(arg3));
+					Log.i(mAlbums[groupPosition].getTrack(childPosition).getTitle(), "clicked");
+					coverArt.setImageBitmap(UtilityBelt.bitmapFromNet(mAlbums[groupPosition].getArtUrl()));
+					//VideoView mp = new VideoView(Profile.this);
+					videoView1.setVideoURI(Uri.parse(mAlbums[groupPosition].getTrack(childPosition).getTitle()));
+					videoView1.requestFocus();
+				}
+				
+			});
 			// Need to poll bandcamp again for songs
-			return null;
+			return textView;
 		}
 
 		public int getChildrenCount(int groupPosition) {
-			// TODO Auto-generated method stub
-			return 0;
+			return mAlbums[groupPosition].getTrackCount();
 		}
 
 		public Object getGroup(int groupPosition) {
-			// TODO Auto-generated method stub
-			return null;
+			return mAlbums[groupPosition];
 		}
 
 		public int getGroupCount() {
-			// TODO Auto-generated method stub
 			return mAlbums.length;
 		}
 
 		public long getGroupId(int groupPosition) {
-			// TODO Auto-generated method stub
 			return groupPosition;
 		}
 
@@ -195,7 +212,6 @@ public class Profile extends Activity {
 		}
 
 		public int getCount() {
-			// TODO Auto-generated method stub
 			return mAlbums.length;
 		}
 
