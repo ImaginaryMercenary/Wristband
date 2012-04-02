@@ -15,6 +15,7 @@ import org.json.JSONObject;
 
 import android.app.Activity;
 import android.database.DataSetObserver;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -45,6 +46,7 @@ public class Profile extends Activity {
 	ExpandableListView albumsList;
 	
 	VideoView videoView1;
+	MediaController mController;
 	
 	public void onCreate(Bundle savedInstanceState) {
     	
@@ -58,12 +60,14 @@ public class Profile extends Activity {
         coverArt = (ImageView)findViewById(R.id.coverArt);
         albumsList = (ExpandableListView)findViewById(R.id.albumsList);
         videoView1 = (VideoView)findViewById(R.id.videoView1);
-        
-        videoView1.setMediaController(new MediaController(this));
+        mController = new MediaController(this);
+        videoView1.setMediaController(mController);
+        albumsList.setBackgroundColor(Color.TRANSPARENT);
+        albumsList.setCacheColorHint(Color.TRANSPARENT);
         
         albumsList.setAdapter(new MyExpandableListAdapter());
         bandTitle.setText(extras.getString("band_name"));
-        Log.d("loaded","now about to get image");
+        //Log.d("loaded","now about to get image");
         //coverArt.setImageURI(Uri.parse(extras.getString("album_art")));
         coverArt.setImageBitmap(UtilityBelt.bitmapFromNet(extras.getString("album_art")));
         //populateList(extras.getLong("band_id"));
@@ -91,7 +95,7 @@ public class Profile extends Activity {
 	private void populateList(long bandId){
 		
 		String theQuery = "http://api.bandcamp.com/api/band/3/discography?key="+BCKEY+"&band_id="+bandId;
-		Log.d("bc query", theQuery);
+		//Log.d("bc query", theQuery);
 		HttpClient client = new DefaultHttpClient();
 		
 		HttpGet get = new HttpGet(theQuery);
@@ -101,7 +105,7 @@ public class Profile extends Activity {
 			responseGet = client.execute(get);
 			HttpEntity resEntityGet = responseGet.getEntity();
 			String res = EntityUtils.toString(resEntityGet);
-			Log.d("JSON response",res);
+			//Log.d("JSON response",res);
 			JSONObject discography = new JSONObject(res);
 			JSONArray discArray = discography.getJSONArray("discography");
 			mAlbums = new Album[discArray.length()];
@@ -145,6 +149,8 @@ public class Profile extends Activity {
             textView.setGravity(Gravity.CENTER_VERTICAL | Gravity.LEFT);
             // Set the text starting position
             textView.setPadding(36, 0, 0, 0);
+            textView.setTextColor(Color.YELLOW);
+            //textView.setBackgroundColor(0xcecc00);
             return textView;
         }
 
@@ -157,16 +163,21 @@ public class Profile extends Activity {
 			Log.i("list","expanded");
 			//coverArt.setImageBitmap(UtilityBelt.bitmapFromNet((mAlbums[groupPosition].getArtUrl())));
 			TextView textView = getGenericView();
+			//textView.setTextColor(Color.BLACK);
 			textView.setText(mAlbums[groupPosition].getTrack(childPosition).getTitle());
 			textView.setOnClickListener(new OnClickListener(){
 
 				public void onClick(View v) {
 					//Log.d("clicked child", String.valueOf(arg2)+" "+String.valueOf(arg3));
 					Log.i(mAlbums[groupPosition].getTrack(childPosition).getTitle(), "clicked");
+					Log.i("Stream",Uri.parse(mAlbums[groupPosition].getTrack(childPosition).getStreamingUrl()).toString());
 					coverArt.setImageBitmap(UtilityBelt.bitmapFromNet(mAlbums[groupPosition].getArtUrl()));
 					//VideoView mp = new VideoView(Profile.this);
-					videoView1.setVideoURI(Uri.parse(mAlbums[groupPosition].getTrack(childPosition).getTitle()));
+					
+					videoView1.setVideoURI(Uri.parse(mAlbums[groupPosition].getTrack(childPosition).getStreamingUrl()));
 					videoView1.requestFocus();
+					videoView1.start();
+					mController.show();
 				}
 				
 			});
@@ -192,11 +203,11 @@ public class Profile extends Activity {
 
 		public View getGroupView(int groupPosition, boolean isExpanded,
 				View convertView, ViewGroup parent) {
-			Log.i("list","generating list");
+			//Log.i("list","generating list");
 						
 			TextView textView = getGenericView();
-			Log.i("album "+groupPosition, mAlbums[groupPosition].getAlbumTitle() + " " + mAlbums[groupPosition].getReleaseDate());
-            textView.setText(mAlbums[groupPosition].getAlbumTitle() + " " + mAlbums[groupPosition].getReleaseDate());
+			//Log.i("album "+groupPosition, mAlbums[groupPosition].getAlbumTitle());
+            textView.setText(mAlbums[groupPosition].getAlbumTitle());
             return textView;
 			
 		}

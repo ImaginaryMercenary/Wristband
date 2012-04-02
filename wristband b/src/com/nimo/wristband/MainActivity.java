@@ -29,7 +29,6 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -96,7 +95,7 @@ public class MainActivity extends Activity implements OnClickListener{
 		public void onClick(View arg0) {
 			//try GPS again
 			getGPS();
-			Log.i("gps", GPS[0]+","+GPS[1]);
+			//Log.i("gps", GPS[0]+","+GPS[1]);
 	        List<Address> addresses = null;
 	        if(GPS != null){
 	        	geocoder = new Geocoder(arg0.getContext());
@@ -138,11 +137,11 @@ public class MainActivity extends Activity implements OnClickListener{
 		
 		private String formatDate(int year, int month, int day){
 			int D = day;
-			Log.i("D",String.valueOf(D));
+			//Log.i("D",String.valueOf(D));
 			int M = month;
-			Log.i("M",String.valueOf(M));
+			//Log.i("M",String.valueOf(M));
 			int Y = year;
-			Log.i("Y",String.valueOf(Y));
+			//Log.i("Y",String.valueOf(Y));
 			String MM = "0" + M;
 		    MM = MM.substring(MM.length()-2, MM.length()); 
 		    String DD = "0" + D; 
@@ -255,11 +254,11 @@ public class MainActivity extends Activity implements OnClickListener{
 	
 	private String getTodaysDate(){
 		int D = calendar.get(Calendar.DATE);
-		Log.i("D",String.valueOf(D));
+		//Log.i("D",String.valueOf(D));
 		int M = calendar.get(Calendar.MONTH) + 1;
-		Log.i("M",String.valueOf(M));
+		//Log.i("M",String.valueOf(M));
 		int Y = calendar.get(Calendar.YEAR);
-		Log.i("Y",String.valueOf(Y));
+		//Log.i("Y",String.valueOf(Y));
 		String MM = "0" + M;
 	    MM = MM.substring(MM.length()-2, MM.length()); 
 	    String DD = "0" + D; 
@@ -286,15 +285,15 @@ public class MainActivity extends Activity implements OnClickListener{
 		double[] gps = new double[2];
 		if (l != null) {
 		gps[0] = l.getLatitude();
-		//Log.i("lat",String.valueOf(gps[0]));
+		////Log.i("lat",String.valueOf(gps[0]));
 		gps[1] = l.getLongitude();
-		//Log.i("long",String.valueOf(gps[1]));
+		////Log.i("long",String.valueOf(gps[1]));
 		GPS = gps;
 		}
 		else
 		{
 			//Coarse location returned null
-			Log.d("location", "coarse null, looking for fine");
+			//Log.d("location", "coarse null, looking for fine");
 			getGPSFine();
 		}
 		
@@ -354,7 +353,7 @@ public class RetrieveData extends AsyncTask<String, Integer, SKEvent[]>{
 
 		protected SKEvent[] doInBackground(String... args) {
 			
-			Log.v("query",args[0]);
+			//Log.v("query",args[0]);
 			SKEvent[] myShows = null;
 			try {
 				myShows = sendRequest(args[0]);
@@ -388,7 +387,7 @@ public class RetrieveData extends AsyncTask<String, Integer, SKEvent[]>{
 				if (resEntityGet != null) {
 					// do something with the response
 					String resp = EntityUtils.toString(resEntityGet);
-					Log.i("GET RESPONSE", resp);
+					//Log.i("GET RESPONSE", resp);
 					JSONObject skResults = new JSONObject(resp);
 					JSONObject resultsObject = skResults.getJSONObject("resultsPage");
 					//need to continue extracting pertinent attributes
@@ -415,7 +414,7 @@ public class RetrieveData extends AsyncTask<String, Integer, SKEvent[]>{
 					//Create Vector of eventObject objects to hold all the shows
 					Vector<JSONObject> allEvents = new Vector<JSONObject>();
 					for(int i = 0; i < totalEntries; ++i){
-						Log.i("index",String.valueOf(i));
+						//Log.i("index",String.valueOf(i));
 						JSONObject eventObject = eventArray.getJSONObject(i);
 						allEvents.add(eventObject);
 						MainActivity.progress.incrementProgressBy(1);
@@ -425,7 +424,7 @@ public class RetrieveData extends AsyncTask<String, Integer, SKEvent[]>{
 					//show data we need for this day
 					allShows = new SKEvent[totalEntries];
 					for (int i = 0; i < totalEntries; ++i){
-						//Log.i("index",String.valueOf(i));
+						////Log.i("index",String.valueOf(i));
 						allShows[i] = new SKEvent(allEvents.elementAt(i).getJSONObject("venue"),allEvents.elementAt(i).getJSONObject("start"),allEvents.elementAt(i).getJSONArray("performance"));
 						MainActivity.progress.incrementProgressBy(1);
 					}

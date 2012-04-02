@@ -31,7 +31,7 @@ public class Album {
 		JSONObject jsonalbum = UtilityBelt.retrieveJSON("http://api.bandcamp.com/api/album/2/info?key="+BCKEY+"&album_id="+albumId);
 		try {
 			JSONArray trackArray = jsonalbum.getJSONArray("tracks");
-			Log.d("Tracks", "length "+String.valueOf(trackArray.length()));
+			//Log.d("Tracks", "length "+String.valueOf(trackArray.length()));
 			tracks = new Track[trackArray.length()];
 			for(int i=0;i<trackArray.length();++i){
 				tracks[i] = new Track(trackArray.getJSONObject(i));

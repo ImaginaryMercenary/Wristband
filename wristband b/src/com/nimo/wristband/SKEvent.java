@@ -55,13 +55,13 @@ public class SKEvent {
 	
 	private Vector<Band> populateBands(){
 		//populate a vector of bands if they have bandcamp
-		Log.d("pop","Populating Bands");
+		//Log.d("pop","Populating Bands");
 		Vector<Band> temp = new Vector<Band>();
-		Log.v("total artists",String.valueOf(getArtistCount()));
+		//Log.v("total artists",String.valueOf(getArtistCount()));
 		
 		for(int i=0;i<getArtistCount();++i){
-			Log.v("band "+i,getArtistName(i));
-			Log.i("Longlat",venueLat+","+venueLng);
+			//Log.v("band "+i,getArtistName(i));
+			//Log.i("Longlat",venueLat+","+venueLng);
 			Band tempBand = new Band(getArtistName(i), venueLat, venueLng);
 			if(tempBand.isAvailable()){
 				temp.add(tempBand);
