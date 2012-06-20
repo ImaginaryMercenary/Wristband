@@ -14,10 +14,14 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.database.DataSetObserver;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -47,6 +51,10 @@ public class Profile extends Activity {
 	
 	VideoView videoView1;
 	MediaController mController;
+	ProgressDialog mProgress;
+	
+	String bname;
+	String arturl;
 	
 	public void onCreate(Bundle savedInstanceState) {
     	
@@ -54,7 +62,6 @@ public class Profile extends Activity {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.profile);
         Bundle extras = this.getIntent().getExtras();
-        populateList(extras.getLong("band_id"));
         
         bandTitle = (TextView)findViewById(R.id.bandTitle);
         coverArt = (ImageView)findViewById(R.id.coverArt);
@@ -65,17 +72,61 @@ public class Profile extends Activity {
         albumsList.setBackgroundColor(Color.TRANSPARENT);
         albumsList.setCacheColorHint(Color.TRANSPARENT);
         
-        albumsList.setAdapter(new MyExpandableListAdapter());
-        bandTitle.setText(extras.getString("band_name"));
+        
+        ProgressDialog mProgress = new ProgressDialog(this,ProgressDialog.STYLE_HORIZONTAL);
+        mProgress.setTitle("Wristband");
+        mProgress.setMessage("Retrieving discography from Bandcamp");
+        bname = extras.getString("band_name");
+        arturl = extras.getString("album_art");
+        Parcelable pAlbums[] = extras.getParcelableArray("theAlbums");
+        mAlbums = new Album[pAlbums.length];
+        for(int i=0;i<pAlbums.length;++i){
+        	mAlbums[i] = (Album) pAlbums[i];
+        }
+        //mProgress.show();
+        //new PopulateListTask().execute(extras.getLong("band_id"));
+        //mProgress.dismiss();
+        //populateList(extras.getLong("band_id"));
+        continuePopulate();
+		
+
+	}
+	
+	private void continuePopulate(){
+		albumsList.setAdapter(new MyExpandableListAdapter());
+        bandTitle.setText(bname);
         //Log.d("loaded","now about to get image");
         //coverArt.setImageURI(Uri.parse(extras.getString("album_art")));
-        coverArt.setImageBitmap(UtilityBelt.bitmapFromNet(extras.getString("album_art")));
+        class BMT extends AsyncTask<String,Void,Bitmap>{
+
+			@Override
+			protected Bitmap doInBackground(String... url) {
+				return UtilityBelt.bitmapFromNet(url[0]);
+			}
+        	protected void onPostExecute(Bitmap b){
+        		coverArt.setImageBitmap(b);
+        	}
+        }
+        new BMT().execute(arturl);
+        //coverArt.setImageBitmap();
         //populateList(extras.getLong("band_id"));
         //Make the list
         albumsList.setOnGroupClickListener(new OnGroupClickListener(){
         	  public boolean onGroupClick(ExpandableListView arg0, View arg1,
                   int groupPosition, long arg3) {
-        		  coverArt.setImageBitmap(UtilityBelt.bitmapFromNet(mAlbums[groupPosition].getArtUrl()));
+        		  
+        		  class BMTClick extends AsyncTask<String,Void,Bitmap>{
+
+        				@Override
+        				protected Bitmap doInBackground(String... url) {
+        					return UtilityBelt.bitmapFromNet(url[0]);
+        				}
+        	        	protected void onPostExecute(Bitmap b){
+        	        		coverArt.setImageBitmap(b);
+        	        	}
+        	        }
+        		  //coverArt.setImageBitmap();
+        		  new BMTClick().execute(mAlbums[groupPosition].getArtUrl());
               return false;
               }
         });
@@ -88,47 +139,8 @@ public class Profile extends Activity {
 			}
         	
         });
-		
-
 	}
 	
-	private void populateList(long bandId){
-		
-		String theQuery = "http://api.bandcamp.com/api/band/3/discography?key="+BCKEY+"&band_id="+bandId;
-		//Log.d("bc query", theQuery);
-		HttpClient client = new DefaultHttpClient();
-		
-		HttpGet get = new HttpGet(theQuery);
-		HttpResponse responseGet;
-		try {
-			//Retrieve the JSON discography
-			responseGet = client.execute(get);
-			HttpEntity resEntityGet = responseGet.getEntity();
-			String res = EntityUtils.toString(resEntityGet);
-			//Log.d("JSON response",res);
-			JSONObject discography = new JSONObject(res);
-			JSONArray discArray = discography.getJSONArray("discography");
-			mAlbums = new Album[discArray.length()];
-			
-			for(int i = 0; i < discArray.length(); ++i){
-				//Fill the Album array
-				mAlbums[i] = new Album(discArray.getJSONObject(i));
-			}
-			
-			
-			
-		} catch (ClientProtocolException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// check if the data is enabled
-			e.printStackTrace();
-		} catch (JSONException e) {
-			// JSON parsing error
-			e.printStackTrace();
-		}
-        
-	}
 
 	public class MyExpandableListAdapter extends BaseExpandableListAdapter{
 		
@@ -171,13 +183,24 @@ public class Profile extends Activity {
 					//Log.d("clicked child", String.valueOf(arg2)+" "+String.valueOf(arg3));
 					Log.i(mAlbums[groupPosition].getTrack(childPosition).getTitle(), "clicked");
 					Log.i("Stream",Uri.parse(mAlbums[groupPosition].getTrack(childPosition).getStreamingUrl()).toString());
-					coverArt.setImageBitmap(UtilityBelt.bitmapFromNet(mAlbums[groupPosition].getArtUrl()));
+					class BMTChild extends AsyncTask<String,Void,Bitmap>{
+
+        				@Override
+        				protected Bitmap doInBackground(String... url) {
+        					return UtilityBelt.bitmapFromNet(url[0]);
+        				}
+        	        	protected void onPostExecute(Bitmap b){
+        	        		coverArt.setImageBitmap(b);
+        	        	}
+        	        }
+					new BMTChild().execute(mAlbums[groupPosition].getArtUrl());
+					//coverArt.setImageBitmap(UtilityBelt.bitmapFromNet();
 					//VideoView mp = new VideoView(Profile.this);
 					
 					videoView1.setVideoURI(Uri.parse(mAlbums[groupPosition].getTrack(childPosition).getStreamingUrl()));
 					videoView1.requestFocus();
 					videoView1.start();
-					mController.show();
+					mController.show(0);
 				}
 				
 			});

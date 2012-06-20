@@ -115,7 +115,7 @@ public class SongClick implements OnItemLongClickListener{
 			handler.post(new Runnable() {
 			      public void run() {
 			        BCPlayer.mediaController1.setEnabled(true);
-			        BCPlayer.mediaController1.show();
+			        BCPlayer.mediaController1.show(0);
 			      }});
 			
 			Log.d("mPlayer", "should be playing now");
@@ -210,7 +210,7 @@ public class SongClick implements OnItemLongClickListener{
 			}
 			BCPlayer.nameText.setText(desc);
 			if(BCPlayer.mPlayer.isPlaying())
-				BCPlayer.mediaController1.show();
+				BCPlayer.mediaController1.show(0);
 		}
 
 		public void onNothingSelected(AdapterView<?> arg0) {
