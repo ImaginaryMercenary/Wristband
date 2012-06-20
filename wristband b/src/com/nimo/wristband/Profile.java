@@ -200,7 +200,7 @@ public class Profile extends Activity {
 					videoView1.setVideoURI(Uri.parse(mAlbums[groupPosition].getTrack(childPosition).getStreamingUrl()));
 					videoView1.requestFocus();
 					videoView1.start();
-					mController.show(10);
+					mController.show();
 				}
 				
 			});
