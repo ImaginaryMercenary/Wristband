@@ -17,7 +17,7 @@
 		certified by Bandcamp, Inc.</string>
 	<string name="aboutMessage">Wristband uses the SongKick and Bandcamp APIs to
 		help you discover shows happening in your area.</string>
-	<string name="app_version">1.0</string>
+	<string name="app_version">1.85</string>
 	<string name="copyright">Copyright 2012 Allan Pichardo.</string>
 	<string name="cityhint">Your City</string>
 	<string name="datelabel">Date:</string>
