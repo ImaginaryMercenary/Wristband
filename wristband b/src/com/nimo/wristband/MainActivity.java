@@ -29,6 +29,7 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -56,6 +57,7 @@ public class MainActivity extends Activity implements OnClickListener{
 	public static double[] GPS;
 	DatePickerDialog dateDialog;
 	Geocoder geocoder;
+	public static DatabaseHandler db;
 				
     /** Called when the activity is first created. */
     @Override
@@ -129,7 +131,7 @@ public class MainActivity extends Activity implements OnClickListener{
 
 		public void onDateSet(DatePicker view, int year, int monthOfYear,
 				int dayOfMonth) {
-			date = String.valueOf(year) + "-" + String.valueOf(monthOfYear+1) + "-" + String.valueOf(dayOfMonth);
+			//date = String.valueOf(year) + "-" + String.valueOf(monthOfYear+1) + "-" + String.valueOf(dayOfMonth);
 			dateText.setText(formatDate(year,monthOfYear+1,dayOfMonth));
 			
 			
@@ -449,6 +451,19 @@ public class RetrieveData extends AsyncTask<String, Integer, SKEvent[]>{
 		protected void onPostExecute(SKEvent[] result){
 			if(result != null){
 				MainActivity.allTheEvents = result;
+				//add all the data to the database
+				for(int e = 0; e < MainActivity.allTheEvents.length;++e){
+					for(int b = 0; b < MainActivity.allTheEvents[e].getBands().size();++b){
+						db.addEntry(allTheEvents[e].getBands().elementAt(b).getBandName(),
+								allTheEvents[e].getBands().elementAt(b).getBandId(),
+								allTheEvents[e].getVenueName(),
+								allTheEvents[e].getVenueLat(), 
+								allTheEvents[e].getVenueLng(),
+								allTheEvents[e].getBands().elementAt(b).getSongName(),
+								allTheEvents[e].getBands().elementAt(b).getRandomSongUrl(),
+								allTheEvents[e].getBands().elementAt(b).getImageUrl());
+					}
+				}
 				MainActivity.progress.dismiss();
 				MainActivity.isReady = true;
 				SwitchNow();
@@ -467,24 +482,40 @@ public class RetrieveData extends AsyncTask<String, Integer, SKEvent[]>{
 public void onClick(View arg0) {
 	//The button was clicked, execute
 	
-	if(UtilityBelt.haveInternet(getApplicationContext()) && GPS != null){
-		//Data is enabled. Proceed.
-		
-		String theQuery = makeQueryString(dateText.getText().toString(),getCoordString(GPS));
-		new RetrieveData().execute(theQuery);
-		//return true;
-	}
-	else{
-		//Data disabled. Warn user.
-		String disco = "A connection to the internet is required to proceed. Please check " +
-				"your wireless settings and try again.";
-		
-		Context context = getApplicationContext();
-		int duration = Toast.LENGTH_SHORT;
+	
 
-		Toast.makeText(context, disco, duration).show();
-		//return false;
+	if (!DatabaseHandler.checkDataBase(dateText.getText().toString())) {
+	    // Database does not exist so copy it from assets here
+	    Log.i("Database", "Not Found");
+	    db = new DatabaseHandler(this,dateText.getText().toString());
+		
+		if(UtilityBelt.haveInternet(getApplicationContext()) && GPS != null){
+			//Data is enabled. Proceed.
+			
+			String theQuery = makeQueryString(dateText.getText().toString(),getCoordString(GPS));
+			new RetrieveData().execute(theQuery);
+			//return true;
+		}
+		else{
+			//Data disabled. Warn user.
+			String disco = "A connection to the internet is required to proceed. Please check " +
+					"your wireless settings and try again.";
+			
+			Context context = getApplicationContext();
+			int duration = Toast.LENGTH_SHORT;
+
+			Toast.makeText(context, disco, duration).show();
+			//return false;
+		}
+	} else {
+	    Log.i("Database", "Found");
+	    //go directly to BCPlayer
+	    db = new DatabaseHandler(this,dateText.getText().toString());
+	    isReady = true;
+	    SwitchNow();
 	}
+	
+	
 	
 }
 }

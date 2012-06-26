@@ -1,12 +1,8 @@
 package com.nimo.wristband;
 
-import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
-import java.net.URLConnection;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -24,8 +20,6 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -73,16 +67,19 @@ public class BCPlayer extends Activity{
 		setContentView(R.layout.bcplayer);
 
 
-		artList = setArtList();
-		streamList = setStreamList();
-		nameList = setNameList();
-		venueList = setVenueList();
-		titleList = setTitleList();
-		coordList = setCoordList();
-		timeList = setTimeList();
-		idList = setIdList();
-
-
+		artList = new String[MainActivity.db.getNumberEntries()];
+		streamList = new String[MainActivity.db.getNumberEntries()];
+		nameList = new String[MainActivity.db.getNumberEntries()];
+		venueList = new String[MainActivity.db.getNumberEntries()];
+		titleList = new String[MainActivity.db.getNumberEntries()];
+		coordList = new double[MainActivity.db.getNumberEntries()][2];
+		idList = new long[MainActivity.db.getNumberEntries()];
+		
+		MainActivity.db.getAllData(nameList, idList, venueList, coordList, titleList, streamList, artList);
+		//debug:
+		for(int i = 0; i < nameList.length; ++i){
+			Log.d("Band: ",nameList[i]);
+		}
 		//coverFlow = new CoverFlow(this);
 		coverFlow = (CoverFlow) findViewById(R.id.coverFlow);
 		nameText = (TextView) findViewById(R.id.nameText);
@@ -105,7 +102,7 @@ public class BCPlayer extends Activity{
 		dateText.setText(MainActivity.date);
 		coverFlow.setAdapter(coverImageAdapter);
 		coverFlow.setSpacing(-25);
-		coverFlow.setSelection(0, true);
+		//coverFlow.setSelection(0, true);
 		coverFlow.setAnimationDuration(1000);
 		coverFlow.setMaxZoom(-350);
 		coverFlow.setMinimumHeight(40);
@@ -119,20 +116,13 @@ public class BCPlayer extends Activity{
 		String bn = BCPlayer.nameList[i];
 		String sn = BCPlayer.titleList[i];
 		String vn = BCPlayer.venueList[i];
-		String tm = timeList[i];
 		String desc;
 		if(sn == null){
-			if(tm != null)
-				desc = bn + " at " + vn;
-			else
-				desc = bn + " at " + vn;
+			desc = bn + " at " + vn;
 		}
 
 		else{
-			if(tm != null)
-				desc = bn + " - '" + sn + "' at " + vn;
-			else
-				desc = bn + " - '" + sn + "' at " + vn;
+			desc = bn + " - '" + sn + "' at " + vn;
 		}
 		BCPlayer.nameText.setText(desc);
 		bcp = this.getApplicationContext();
@@ -287,6 +277,7 @@ public class BCPlayer extends Activity{
 		mPlayer.stopPlayback();
 		trimCache(this.getApplicationContext());
 		//mPlayer.release();
+		MainActivity.db.close();
 		this.finish();
 	}
 
@@ -320,7 +311,8 @@ public class BCPlayer extends Activity{
 	}
 
 
-	private String[] setArtList(){
+	/*private String[] setArtList(){
+		
 		//load up the huge art list
 		int grandTotal = 0;
 		for(int i = 0; i < MainActivity.allTheEvents.length;++i){
@@ -458,7 +450,7 @@ public class BCPlayer extends Activity{
 			}
 		}
 		return theList;
-	}
+	}*/
 
 
 

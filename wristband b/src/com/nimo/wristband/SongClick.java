@@ -193,20 +193,14 @@ public class SongClick implements OnItemLongClickListener{
 			String bn = BCPlayer.nameList[i];
 			String sn = BCPlayer.titleList[i];
 			String vn = BCPlayer.venueList[i];
-			String tm = BCPlayer.timeList[i];
+			//String tm = BCPlayer.timeList[i];
 			String desc;
 			if(sn == null){
-				if(tm != null)
-					desc = bn + " at " + vn;
-				else
-					desc = bn + " at " + vn;
+				desc = bn + " at " + vn;
 			}
 
 			else{
-				if(tm != null)
-					desc = bn + " - '" + sn + "' at " + vn;
-				else
-					desc = bn + " - '" + sn + "' at " + vn;
+				desc = bn + " - '" + sn + "' at " + vn;
 			}
 			BCPlayer.nameText.setText(desc);
 			if(BCPlayer.mPlayer.isPlaying())
