@@ -3,6 +3,7 @@ package com.nimo.wristband;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.Calendar;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -60,22 +61,28 @@ public class BCPlayer extends Activity{
 	public static Context bcp;
 	public static TextView dateText;
 	public static MediaController mediaController1;
+	
+	private String databaseName;
+	DatabaseHandler db;
+	
 	public void onCreate(Bundle savedInstanceState) {
 
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.bcplayer);
-
-
-		artList = new String[MainActivity.db.getNumberEntries()];
-		streamList = new String[MainActivity.db.getNumberEntries()];
-		nameList = new String[MainActivity.db.getNumberEntries()];
-		venueList = new String[MainActivity.db.getNumberEntries()];
-		titleList = new String[MainActivity.db.getNumberEntries()];
-		coordList = new double[MainActivity.db.getNumberEntries()][2];
-		idList = new long[MainActivity.db.getNumberEntries()];
 		
-		MainActivity.db.getAllData(nameList, idList, venueList, coordList, titleList, streamList, artList);
+		databaseName = this.getIntent().getExtras().getString("dbName");
+		db = new DatabaseHandler(this,databaseName);
+
+		artList = new String[db.getNumberEntries()];
+		streamList = new String[db.getNumberEntries()];
+		nameList = new String[db.getNumberEntries()];
+		venueList = new String[db.getNumberEntries()];
+		titleList = new String[db.getNumberEntries()];
+		coordList = new double[db.getNumberEntries()][2];
+		idList = new long[db.getNumberEntries()];
+		
+		db.getAllData(nameList, idList, venueList, coordList, titleList, streamList, artList);
 		//debug:
 		for(int i = 0; i < nameList.length; ++i){
 			Log.d("Band: ",nameList[i]);
@@ -268,8 +275,62 @@ public class BCPlayer extends Activity{
 			Intent a = new Intent(BCPlayer.this,AboutActivity.class);
 			startActivity(a);
 			break;
+		case R.id.shareItem:
+			
+			class GetUrlTask extends AsyncTask<Long, Void, String>{
+				String bandUrl;
+				int i;
+				public GetUrlTask(int index){
+					i = index;
+				}
+				@Override
+				protected String doInBackground(Long... id) {
+					JSONObject bandInfo = UtilityBelt.retrieveJSON("http://api.bandcamp.com/api/band/3/info?key="+BCKEY+"&band_id="+id[0]);
+
+					try {
+						return bandInfo.getString("url");
+					} catch (JSONException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+						return "";
+					}
+				}
+				@Override
+				protected void onPostExecute(String result) {
+					super.onPostExecute(result);
+					bandUrl = result;
+
+					String message = "Check out " + nameList[i] + " playing " +
+							compareDate(MainActivity.date) + " at " + venueList[i] + ". " +
+							bandUrl + "  (Wristband for Android)";
+					Intent share = new Intent(Intent.ACTION_SEND);
+					share.setType("text/plain");
+					share.putExtra(Intent.EXTRA_TEXT, message);
+
+					startActivity(Intent.createChooser(share, "Share " + nameList[i] + "..."));
+				}
+			}
+			GetUrlTask gut = new GetUrlTask(i);
+			gut.execute(idList[i]);
+			break;
 		}
 		return true;
+	}
+	
+	private String compareDate(String date){
+		Calendar today = Calendar.getInstance();
+		int[] todayParts = {today.get(Calendar.MONTH)+1,today.get(Calendar.DATE),today.get(Calendar.YEAR)};
+		String[] dateParts = date.split("/");
+		String response = null;
+		if(Integer.parseInt(dateParts[0]) == todayParts[0] &&
+			Integer.parseInt(dateParts[1]) == todayParts[1] &&
+			Integer.parseInt(dateParts[2]) == todayParts[2]){
+			//today
+			response = "today";
+		}else{
+			response = date;
+		}
+		return response;
 	}
 
 	@Override
@@ -277,7 +338,7 @@ public class BCPlayer extends Activity{
 		mPlayer.stopPlayback();
 		trimCache(this.getApplicationContext());
 		//mPlayer.release();
-		MainActivity.db.close();
+		db.close();
 		this.finish();
 	}
 

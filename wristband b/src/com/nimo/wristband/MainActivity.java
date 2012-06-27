@@ -57,7 +57,8 @@ public class MainActivity extends Activity implements OnClickListener{
 	public static double[] GPS;
 	DatePickerDialog dateDialog;
 	Geocoder geocoder;
-	public static DatabaseHandler db;
+	private DatabaseHandler db;
+	private String databaseName;
 				
     /** Called when the activity is first created. */
     @Override
@@ -344,6 +345,7 @@ public class MainActivity extends Activity implements OnClickListener{
 	
 	private void SwitchNow(){
 		i = new Intent(MainActivity.this,BCPlayer.class);
+		i.putExtra("dbName", databaseName);
 		startActivity(i);
 	}
 	
@@ -482,12 +484,12 @@ public class RetrieveData extends AsyncTask<String, Integer, SKEvent[]>{
 public void onClick(View arg0) {
 	//The button was clicked, execute
 	
-	
+	databaseName = dateText.getText().toString();
 
-	if (!DatabaseHandler.checkDataBase(dateText.getText().toString())) {
+	if (!DatabaseHandler.checkDataBase(databaseName)) {
 	    // Database does not exist so copy it from assets here
 	    Log.i("Database", "Not Found");
-	    db = new DatabaseHandler(this,dateText.getText().toString());
+	    db = new DatabaseHandler(this,databaseName);
 		
 		if(UtilityBelt.haveInternet(getApplicationContext()) && GPS != null){
 			//Data is enabled. Proceed.
@@ -510,7 +512,7 @@ public void onClick(View arg0) {
 	} else {
 	    Log.i("Database", "Found");
 	    //go directly to BCPlayer
-	    db = new DatabaseHandler(this,dateText.getText().toString());
+	    db = new DatabaseHandler(this,databaseName);
 	    isReady = true;
 	    SwitchNow();
 	}

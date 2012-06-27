@@ -1,20 +1,11 @@
 package com.nimo.wristband;
 
-import java.io.IOException;
-
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.util.EntityUtils;
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.database.DataSetObserver;
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -24,6 +15,9 @@ import android.os.Bundle;
 import android.os.Parcelable;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -67,6 +61,7 @@ public class Profile extends Activity {
         coverArt = (ImageView)findViewById(R.id.coverArt);
         albumsList = (ExpandableListView)findViewById(R.id.albumsList);
         videoView1 = (VideoView)findViewById(R.id.videoView1);
+        videoView1.setMediaController(mController);
         mController = new MediaController(this);
         videoView1.setMediaController(mController);
         albumsList.setBackgroundColor(Color.TRANSPARENT);
@@ -78,6 +73,7 @@ public class Profile extends Activity {
         mProgress.setMessage("Retrieving discography from Bandcamp");
         bname = extras.getString("band_name");
         arturl = extras.getString("album_art");
+        mBandId = extras.getLong("band_id");
         Parcelable pAlbums[] = extras.getParcelableArray("theAlbums");
         mAlbums = new Album[pAlbums.length];
         for(int i=0;i<pAlbums.length;++i){
@@ -90,6 +86,46 @@ public class Profile extends Activity {
         continuePopulate();
 		
 
+	}
+	
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(R.menu.profilemenu, menu);
+		return true;
+	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		
+		switch(item.getItemId()){
+		case R.id.bandcampItem:
+			class GetUrlTask extends AsyncTask<Long, Void, String>{
+				@Override
+				protected String doInBackground(Long... id) {
+					JSONObject bandInfo = UtilityBelt.retrieveJSON("http://api.bandcamp.com/api/band/3/info?key="+BCKEY+"&band_id="+id[0]);
+
+					try {
+						return bandInfo.getString("url");
+					} catch (JSONException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+						return "http://www.bandcamp.com";
+					}
+				}
+				@Override
+				protected void onPostExecute(String result) {
+					super.onPostExecute(result);
+					Log.d("url",result);
+					Intent browserIntent;
+					browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(result));
+					startActivity(browserIntent);
+				}
+			}
+			new GetUrlTask().execute(mBandId);
+			break;
+		}
+		return true;
 	}
 	
 	private void continuePopulate(){
@@ -199,8 +235,8 @@ public class Profile extends Activity {
 					
 					videoView1.setVideoURI(Uri.parse(mAlbums[groupPosition].getTrack(childPosition).getStreamingUrl()));
 					videoView1.requestFocus();
+					mController.show(0);
 					videoView1.start();
-					mController.show();
 				}
 				
 			});

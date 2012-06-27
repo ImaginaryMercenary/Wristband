@@ -1,6 +1,5 @@
 package com.nimo.wristband;
 
-import java.io.Serializable;
 import java.util.Date;
 
 import org.json.JSONArray;
@@ -9,7 +8,6 @@ import org.json.JSONObject;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.util.Log;
 
 public class Album implements Parcelable{
 	/* Takes a JSONObject from the bandcamp
@@ -126,6 +124,7 @@ public class Album implements Parcelable{
 		dest.writeString(jsonAlbumTracks.toString());
 	}
 
+	@SuppressWarnings("rawtypes")
 	public static final Parcelable.Creator CREATOR =
 			new Parcelable.Creator() {
 		public Album createFromParcel(Parcel in) {

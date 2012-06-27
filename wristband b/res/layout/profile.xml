@@ -17,25 +17,26 @@
         android:layout_width="match_parent"
         android:layout_height="fill_parent"
         android:layout_weight="1" >
-
+
         <LinearLayout
             android:id="@+id/linearLayout1"
-            android:layout_width="151dp"
+            android:layout_width="189dp"
             android:layout_height="match_parent"
             android:orientation="vertical" >
-
+
             <ImageView
                 android:id="@+id/coverArt"
-                android:layout_width="126dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="0.25" />
-
+                android:layout_weight="0.84" />
+
             <LinearLayout
                 android:id="@+id/linearLayout2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight=".75"
+                android:layout_weight="0.35"
                 android:orientation="vertical" >
+
             </LinearLayout>
         </LinearLayout>
 
