@@ -410,7 +410,7 @@ public class RetrieveData extends AsyncTask<String, Integer, SKEvent[]>{
 					//PopupWindow pw = new PopupWindow(this.getLayoutInflater().inflate(R.layout.showprogress, null), 100, 100, true);
 					//pw.showAtLocation(this.findViewById(R.id.theRoot), Gravity.CENTER, 0, 0);
 					
-					MAX = totalEntries * 6;
+					MAX = totalEntries * 7;
 					MainActivity.progress.setMax(MAX);
 					JSONObject results = resultsObject.getJSONObject("results");
 					JSONArray eventArray = results.getJSONArray("event");
@@ -445,7 +445,7 @@ public class RetrieveData extends AsyncTask<String, Integer, SKEvent[]>{
 		protected void onPreExecute() {
 			//progress = MainActivity.progress;
 			MainActivity.progress.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-			MainActivity.progress.setTitle("Searching for shows. This may take a moment...");
+			MainActivity.progress.setTitle("Searching Songkick for shows near " + cityText.getText().toString() + "...");
 			MainActivity.progress.setMax(50);
 			MainActivity.progress.show();
 		}
